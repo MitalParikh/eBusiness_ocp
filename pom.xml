@@ -31,6 +31,9 @@
 		<java.version>17</java.version>
 		<frontend.workingDirectory>ng_web</frontend.workingDirectory>
 		<frontend.buildDirectory>dist/filigree</frontend.buildDirectory>
+		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
+		<!-- Node.js and npm versions - should match package.json engines -->
+		<node.version>v22.17.1</node.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -56,6 +59,8 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- Frontend Maven Plugin - Build Angular App -->
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
@@ -69,12 +74,16 @@
 						<goals>
 							<goal>install-node-and-corepack</goal>
 						</goals>
+						<configuration>
+							<nodeVersion>${node.version}</nodeVersion>
+						</configuration>
 					</execution>
 					<execution>
 						<id>npm install</id>
 						<goals>
 							<goal>corepack</goal>
 						</goals>
+						<phase>generate-resources</phase>
 						<configuration>
 							<arguments>npm install</arguments>
 						</configuration>
@@ -84,11 +93,52 @@
 						<goals>
 							<goal>corepack</goal>
 						</goals>
+						<phase>generate-resources</phase>
 						<configuration>
-							<arguments>npm run build -- --output-path=${frontend.buildDirectory}</arguments>
+							<arguments>npm run build</arguments>
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+
+			<!-- Maven Resources Plugin - Copy Angular build to Spring Boot static -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-angular-build</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/classes/static</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${frontend.workingDirectory}/${frontend.buildDirectory}/browser</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Maven WAR Plugin - Configure WAR packaging -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warName>${project.artifactId}-${project.version}-${maven.build.timestamp}</warName>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<directory>${frontend.workingDirectory}/${frontend.buildDirectory}/browser</directory>
+							<targetPath>/</targetPath>
+						</resource>
+					</webResources>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

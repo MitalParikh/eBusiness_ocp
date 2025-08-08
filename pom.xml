@@ -35,6 +35,20 @@
 		<!-- Node.js and npm versions - should match package.json engines -->
 		<node.version>v22.17.1</node.version>
 	</properties>
+	<profiles>
+		<!-- <profile>
+			<id>local</id>
+			<properties>
+				<spring.profiles.active>local</spring.profiles.active>
+			</properties>
+		</profile> -->
+		<profile>
+			<id>openshift</id>
+			<properties>
+				<spring.profiles.active>openshift</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -140,6 +154,42 @@
 					</webResources>
 				</configuration>
 			</plugin>
+
+			<!-- Eclipse JKube OpenShift Maven Plugin -->
+			<plugin>
+				<groupId>org.eclipse.jkube</groupId>
+				<artifactId>openshift-maven-plugin</artifactId>
+				<version>1.16.2</version>
+				<configuration>
+					<images>
+						<image>
+							<name>web-ocp</name>
+							<build>
+								<from>registry.access.redhat.com/ubi8/openjdk-17:1.20-2</from>
+								<assembly>
+									<targetDir>/deployments</targetDir>
+									<inline>
+										<files>
+											<file>
+												<source>${project.build.directory}/${project.build.finalName}.war</source>
+												<outputDirectory>.</outputDirectory>
+											</file>
+										</files>
+									</inline>
+								</assembly>
+								<env>
+									<JAVA_APP_JAR>${project.build.finalName}.war</JAVA_APP_JAR>
+									<JAVA_APP_DIR>/deployments</JAVA_APP_DIR>
+								</env>
+								<ports>
+									<port>8080</port>
+								</ports>
+							</build>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 

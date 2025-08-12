@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filigree OCP Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #e00;
+            margin-bottom: 20px;
+        }
+        .status {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Filigree OpenShift Deployment</h1>
+        <div class="status">
+            ✅ Application successfully deployed to OpenShift!
+        </div>
+        <div class="info">
+            <strong>Repository:</strong> MitalParikh/filigree_ocp<br>
+            <strong>Deployment Method:</strong> GitHub Actions + OpenShift<br>
+            <strong>Container:</strong> Nginx serving static content
+        </div>
+        <p>
+            This is a demonstration application showing that your OpenShift 
+            configuration is working correctly. The application was built and 
+            deployed using the GitHub Actions workflow.
+        </p>
+        <hr>
+        <small>
+            <strong>Configuration Status:</strong><br>
+            • OPENSHIFT_SERVER: Configured ✅<br>
+            • OPENSHIFT_TOKEN: Configured ✅<br>
+            • GitHub Actions Workflow: Active ✅
+        </small>
+    </div>
+</body>
+</html>

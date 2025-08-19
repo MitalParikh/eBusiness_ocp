@@ -15,22 +15,37 @@ export class AppComponent {
   showMenu = false;
   activeTab = 'viewer'; // default tab
   sliderImages = [
-    'assets/img1.jpg',
+    'assets/img5.jpg',
     'assets/img2.jpg',
-    'assets/img3.jpg'
+    'assets/img4.png'
   ];
   currentSlide = 0;
+  fadingOutIndex: number | null = null;
+  transitionMs = 600;
 
-  openPopup(index: number) {
-    alert('Clicked image #' + (index + 1));
+  constructor() {
+    this.preloadImages();
   }
 
-  prevSlide() {
-    this.currentSlide = (this.currentSlide - 1 + this.sliderImages.length) % this.sliderImages.length;
+  preloadImages() {
+    this.sliderImages.forEach(src => {
+      const img = new Image();
+      img.src = src; // browser caches; reduces flicker when showing
+    });
   }
 
-  nextSlide() {
-    this.currentSlide = (this.currentSlide + 1) % this.sliderImages.length;
+  // When image is clicked, advance to the next image (or choose behavior here)
+  onImageClick(index: number) {
+    const next = (index + 1) % this.sliderImages.length;
+    if (next === this.currentSlide) return; // no change
+    this.fadingOutIndex = this.currentSlide;
+    this.currentSlide = next;
+    setTimeout(() => {
+      // clear fading out after animation completes
+      if (this.fadingOutIndex === this.fadingOutIndex) {
+        this.fadingOutIndex = null;
+      }
+    }, this.transitionMs);
   }
-  title = 'filigree';
+  title = 'eBusiness';
 }

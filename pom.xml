@@ -8,7 +8,7 @@
 		<version>3.4.8</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.filigree</groupId>
+	<groupId>com.eBusiness</groupId>
 	<artifactId>web_ocp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -30,7 +30,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<frontend.workingDirectory>ng_web</frontend.workingDirectory>
-		<frontend.buildDirectory>dist/filigree</frontend.buildDirectory>
+		<frontend.buildDirectory>dist/ebusiness</frontend.buildDirectory>
 		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
 		<!-- Node.js and npm versions - should match package.json engines -->
 		<node.version>v22.17.1</node.version>

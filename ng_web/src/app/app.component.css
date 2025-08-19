@@ -4,21 +4,24 @@
   justify-content: flex-start;
   align-items: center;
   background: transparent;
+  padding: 0; /* revert padding */
 }
 
-.slider-wrapper {
+.header-slider {
   position: relative;
   width: 100vw;
-  height: 250px;
+  height: 125px; /* kept slider height */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 .slider-image {
   width: 100vw;
-  height: 250px;
+  height: 125px; /* Reduced from 250px */
   object-fit: cover;
   opacity: 0;
   transition: opacity 0.5s;
@@ -26,33 +29,24 @@
   left: 0;
   top: 0;
   z-index: 1;
+  cursor: pointer;
+  will-change: opacity;
 }
 
+/* Keep previous slide visible during fade to avoid flicker */
 .slider-image.active {
   opacity: 1;
   z-index: 2;
   position: relative;
 }
 
-.slider-arrow {
+.slider-image.fading-out {
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 0.6s ease-in-out;
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(63,81,181,0.7);
-  border: none;
-  color: #fff;
-  font-size: 2rem;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-radius: 50%;
-  z-index: 3;
 }
-.left-arrow {
-  left: 16px;
-}
-.right-arrow {
-  right: 16px;
-}
+
 :host {
   --bright-blue: oklch(51.01% 0.274 263.83);
   --electric-violet: oklch(53.18% 0.28 296.97);
@@ -261,6 +255,70 @@ main {
   text-align: center;
   padding: 0; /* Removed padding */
   z-index: 1000;
+  margin: 0 !important; /* remove any top/bottom margin */
+}
+
+.auth-links {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  display: flex;
+  gap: 0.75rem;
+  z-index: 2000;
+  align-items: center;
+}
+
+.auth-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 20px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  backdrop-filter: blur(4px);
+}
+.auth-link:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: #fff;
+}
+.auth-link.primary:hover {
+  background: rgba(0, 0, 0, 0.189);
+  border-color: rgba(0,0,0,0.2);
+  backdrop-filter: blur(4px);
+  shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+.auth-link.primary {
+  background: rgba(0, 0, 0, 0.189);
+  border-color: rgba(0,0,0,0);
+  backdrop-filter: blur(4px);
+  shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+/* Make the Login link (first auth-link, non-primary) black */
+.auth-links .auth-link:first-child {
+  background: rgba(0, 0, 0, 0.189);
+  border-color: rgba(0,0,0,0);
+  backdrop-filter: blur(4px);
+  shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+.auth-links .auth-link:first-child:hover {
+  background: rgba(0, 0, 0, 0.189);
+  border-color: rgba(0,0,0,0.2);
+  backdrop-filter: blur(4px);
+  shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 600px) {
+  .auth-links {
+    top: 4px;
+    right: 8px;
+    gap: 0.5rem;
+  }
+  .auth-link {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.75rem;
+  }
 }
 
 .main-content {

@@ -1,4 +1,4 @@
-package com.filigree.web_ocp.controller;
+package com.ebusiness.web_ocp.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +26,7 @@ public class ApiController {
     @GetMapping("/info")
     public Map<String, Object> info() {
         Map<String, Object> response = new HashMap<>();
-        response.put("application", "Filigree Web OCP");
+        response.put("application", "eBusiness Web OCP");
         response.put("version", "0.0.1-SNAPSHOT");
         response.put("description", "Combined Spring Boot and Angular application");
         return response;

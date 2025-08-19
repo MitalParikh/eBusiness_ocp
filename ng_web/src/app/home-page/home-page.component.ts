@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   template: `
     <div class="home-page">
-      <h2>Welcome to Filigree!</h2>
+      <h2>Welcome to eBusiness!</h2>
       <p>This is the home page of your application.</p>
     </div>
   `,

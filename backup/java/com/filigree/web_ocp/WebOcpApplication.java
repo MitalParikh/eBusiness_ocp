@@ -1,4 +1,7 @@
-package com.filigree.web_ocp;
+package com.ebusiness.web_ocp;
+
+// This file has been moved to the new package: com.ebusiness.web_ocp
+// Original application class moved during rebranding. Kept as a placeholder to avoid accidental edits.
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

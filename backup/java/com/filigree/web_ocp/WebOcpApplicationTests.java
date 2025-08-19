@@ -1,4 +1,4 @@
-package com.filigree.web_ocp;
+package com.ebusiness.web_ocp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

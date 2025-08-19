@@ -1,51 +1,61 @@
 <header class="fixed-header">
-<div class="header-slider">
-  <div class="slider-wrapper">
-    <!-- <img class="slider-logo" src="assets/img1.jpg" alt="Filigree Logo"> -->
-    <button class="slider-arrow left-arrow" (click)="prevSlide()">&#8592;</button>
+  <div class="auth-links">
+    <a routerLink="/login" class="auth-link">Login</a>
+    <a routerLink="/signup" class="auth-link primary">Sign Up</a>
+  </div>
+  <div class="header-slider">
+    <!-- Images clickable to advance slider; cross-fade without flicker -->
     <img *ngFor="let img of sliderImages; let i = index"
          [src]="img"
          [alt]="'Slide ' + (i+1)"
-         [class]="'slider-image'"
-          [class.active]="i === currentSlide"
-         (click)="openPopup(i)">
-    <button class="slider-arrow right-arrow" (click)="nextSlide()">&#8594;</button>
-   
+         class="slider-image"
+         [class.active]="i === currentSlide"
+         [class.fading-out]="i === fadingOutIndex"
+         (click)="onImageClick(i)">
   </div>
-  <!-- <div class="slider-controls">
-  </div> -->
   <div class="tools-bar">
-  <nav class="tools-tabs">
-    <a 
-      class="tools-tab" 
-      [class.active]="activeTab === 'viewer'"
-      routerLink="/" 
-      (click)="activeTab = 'viewer'" 
-      href="javascript:void(0);">
-      Queue Message Viewer
-    </a>
-    <a 
-      class="tools-tab" 
-      [class.active]="activeTab === 'admin'" 
-      routerLink="/listener"
-      (click)="activeTab = 'admin'">
-      Queue Admin
-    </a>
-  </nav>
-  <!-- <h1>Filigree Application</h1> -->
-</div>
-  
-</div>
+    <nav class="tools-tabs">
+      <a 
+        class="tools-tab" 
+        [class.active]="activeTab === 'viewer'"
+        routerLink="/" 
+        (click)="activeTab = 'viewer'" 
+        href="javascript:void(0);">
+        About
+      </a>
+      <a 
+        class="tools-tab" 
+        [class.active]="activeTab === 'admin'" 
+        routerLink="/listener"
+        (click)="activeTab = 'admin'">
+        Projects
+      </a>
+      <a 
+        class="tools-tab" 
+        [class.active]="activeTab === 'admin'" 
+        routerLink="/listener"
+        (click)="activeTab = 'admin'">
+        Order History
+      </a>
+      <a 
+        class="tools-tab" 
+        [class.active]="activeTab === 'admin'" 
+        routerLink="/listener"
+        (click)="activeTab = 'admin'">
+        Order tracking
+      </a>
+    </nav>
+  </div>
 </header>
 
 <body>
-  <h1>Welcome to Filigree</h1>
+  <h1>Welcome to eBusiness</h1>
   <p>Your content goes here.</p>
-<main class="main-content">
-      <router-outlet></router-outlet><!-- Main content goes here -->
-</main></body>
-
+  <main class="main-content">
+    <router-outlet></router-outlet><!-- Main content goes here -->
+  </main>
+</body>
 
 <footer class="fixed-footer">
-  <p>&copy; 2025 Filigree. All rights reserved.</p>
+  <p>&copy; 2025 eBusiness. All rights reserved.</p>
 </footer>

@@ -34,6 +34,8 @@
 		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
 		<!-- Node.js and npm versions - should match package.json engines -->
 		<node.version>v22.17.1</node.version>
+		<!-- Fully-qualified image name used by JKube; override with -Djkube.imageName=... when needed -->
+		<jkube.imageName>image-registry.openshift-image-registry.svc:5000/mitalparikh-dev/ebusiness-web-ocp-git:${project.version}</jkube.imageName>
 	</properties>
 	<profiles>
 		<!-- <profile>
@@ -47,6 +49,45 @@
 			<properties>
 				<spring.profiles.active>openshift</spring.profiles.active>
 			</properties>
+			<build>
+				<plugins>
+					<!-- Eclipse JKube OpenShift Maven Plugin (profile-scoped) -->
+					<plugin>
+						<groupId>org.eclipse.jkube</groupId>
+						<artifactId>openshift-maven-plugin</artifactId>
+						<version>1.16.2</version>
+						<configuration>
+							<images>
+								<image>
+									<!-- Using assembly-based image; image name should be fully qualified for pushing to a registry -->
+									<name>${jkube.imageName}</name>
+									<build>
+										<from>registry.access.redhat.com/ubi8/openjdk-17:1.20-2</from>
+										<assembly>
+											<targetDir>/deployments</targetDir>
+											<inline>
+												<files>
+													<file>
+														<source>${project.build.directory}/${project.build.finalName}.war</source>
+														<outputDirectory>.</outputDirectory>
+													</file>
+												</files>
+											</inline>
+										</assembly>
+										<env>
+											<JAVA_APP_JAR>${project.build.finalName}.war</JAVA_APP_JAR>
+											<JAVA_APP_DIR>/deployments</JAVA_APP_DIR>
+										</env>
+										<ports>
+											<port>8080</port>
+										</ports>
+									</build>
+								</image>
+							</images>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 	<dependencies>
@@ -156,39 +197,7 @@
 			</plugin>
 
 			<!-- Eclipse JKube OpenShift Maven Plugin -->
-			<plugin>
-				<groupId>org.eclipse.jkube</groupId>
-				<artifactId>openshift-maven-plugin</artifactId>
-				<version>1.16.2</version>
-				<configuration>
-					<images>
-						<image>
-							<name>web-ocp</name>
-							<build>
-								<from>registry.access.redhat.com/ubi8/openjdk-17:1.20-2</from>
-								<assembly>
-									<targetDir>/deployments</targetDir>
-									<inline>
-										<files>
-											<file>
-												<source>${project.build.directory}/${project.build.finalName}.war</source>
-												<outputDirectory>.</outputDirectory>
-											</file>
-										</files>
-									</inline>
-								</assembly>
-								<env>
-									<JAVA_APP_JAR>${project.build.finalName}.war</JAVA_APP_JAR>
-									<JAVA_APP_DIR>/deployments</JAVA_APP_DIR>
-								</env>
-								<ports>
-									<port>8080</port>
-								</ports>
-							</build>
-						</image>
-					</images>
-				</configuration>
-			</plugin>
+
 
 		</plugins>
 	</build>

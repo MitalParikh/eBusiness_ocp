@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.eBusiness</groupId>
 	<artifactId>web_ocp</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>war</packaging>
 	<name>web_ocp</name>
 	<description>openshift deployment of angular app</description>
@@ -35,7 +35,7 @@
 		<!-- Node.js and npm versions - should match package.json engines -->
 		<node.version>v22.17.1</node.version>
 		<!-- Fully-qualified image name used by JKube; override with -Djkube.imageName=... when needed -->
-		<jkube.imageName>image-registry.openshift-image-registry.svc:5000/mitalparikh-dev/ebusiness-web-ocp-git:latest</jkube.imageName>
+		<jkube.imageName>image-registry.openshift-image-registry.svc:5000/mitalparikh-dev/ebusiness-web-ocp-git:${project.version}</jkube.imageName>
 	</properties>
 	<profiles>
 		<!-- <profile>
@@ -185,7 +185,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<warName>${project.artifactId}-${project.version}-${maven.build.timestamp}</warName>
+					<warName>${project.artifactId}-${project.version}</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<webResources>
 						<resource>

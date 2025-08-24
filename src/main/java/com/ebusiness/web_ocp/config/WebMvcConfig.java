@@ -19,7 +19,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Serve static files from classpath:/static/ (where the Angular build is copied)
         registry.addResourceHandler("/assets/**", "/favicon.ico", "/index.html", "/main.*", "/polyfills.*", "/runtime.*", "/styles.*", "/vendor.*")
-                .addResourceLocations("classpath:/static/")
+                .addResourceLocations("classpath:/static/assets")
                 .setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS));
 
         // Serve all other static resources and provide SPA fallback to index.html

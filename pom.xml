@@ -35,7 +35,7 @@
 		<!-- Node.js and npm versions - should match package.json engines -->
 		<node.version>v22.17.1</node.version>
 		<!-- Fully-qualified image name used by JKube; override with -Djkube.imageName=... when needed -->
-		<jkube.imageName>image-registry.openshift-image-registry.svc:5000/mitalparikh-dev/ebusiness-web-ocp-git:${project.version}</jkube.imageName>
+		<jkube.imageName>image-registry.openshift-image-registry.svc:5000/mitalparikh-dev/ebusiness-web-ocp-git:latest</jkube.imageName>
 	</properties>
 	<profiles>
 		<!-- <profile>
@@ -94,8 +94,8 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>

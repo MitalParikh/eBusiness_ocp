@@ -36,3 +36,26 @@ Notes
 - This approach embeds the WAR into the image using the assembly configuration in `pom.xml`. If you prefer to use your own `Dockerfile`, add it to the repo and change the JKube configuration accordingly.
 
 Want me to tweak the image name or add a Dockerfile example? Provide the registry/namespace you'd like and I will update `pom.xml` and README accordingly.
+
+Dockerfile-based build & OpenShift deploy (recommended if you want full control)
+
+This repository now includes a `Dockerfile` at project root which copies the built WAR into `/deployments` and runs it.
+
+1) Build the WAR and the Docker image locally (example):
+
+```powershell
+mvn -DskipTests clean package
+docker build -t registry.example.com/yourproject/web-ocp:${project.version} .
+docker push registry.example.com/yourproject/web-ocp:${project.version}
+```
+
+2) Or let JKube build the image via the `openshift` profile (requires `oc login` and access to the target project):
+
+```powershell
+# JKube will use the project-root Dockerfile when the openshift profile is active
+mvn -Popenshift -Djkube.imageName=registry.example.com/yourproject/web-ocp:${project.version} openshift:build openshift:apply
+```
+
+Notes:
+- If you use JKube to build and push, ensure your environment has access to the target registry (OpenShift internal registry or a configured external registry) and proper credentials.
+- Replace `registry.example.com/yourproject` with your actual registry/namespace.

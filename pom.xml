@@ -62,18 +62,8 @@
 									<!-- Using assembly-based image; image name should be fully qualified for pushing to a registry -->
 									<name>${jkube.imageName}</name>
 									<build>
-										<from>registry.access.redhat.com/ubi8/openjdk-17:1.20-2</from>
-										<assembly>
-											<targetDir>/deployments</targetDir>
-											<inline>
-												<files>
-													<file>
-														<source>${project.build.directory}/${project.build.finalName}.war</source>
-														<outputDirectory>.</outputDirectory>
-													</file>
-												</files>
-											</inline>
-										</assembly>
+										<!-- Use project Dockerfile located at project root -->
+										<dockerFile>${project.basedir}/Dockerfile</dockerFile>
 										<env>
 											<JAVA_APP_JAR>${project.build.finalName}.war</JAVA_APP_JAR>
 											<JAVA_APP_DIR>/deployments</JAVA_APP_DIR>

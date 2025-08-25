@@ -55,24 +55,9 @@ env:
 on:
   # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
   workflow_dispatch:
-  push:
-    # Edit to the branch(es) you want to build and deploy on each push.
-    branches: [ "feature/V1" ]
 
 jobs:
 
-  build-war:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v3
-          - name: Set up JDK 17
-            uses: actions/setup-java@v2
-            with:
-              distribution: 'adopt'
-              java-version: '17'
-          - name: Build with Maven
-            run: mvn clean install -f eBusiness_ocp/blob/feature/V1/pom.xml # Adjust path to your pom.xml
-            
   # 🖊️ EDIT if you want to run vulnerability check on your project before deploying
   # the application. Please uncomment the below CRDA scan job and configure to run it in
   # your workflow. For details about CRDA action visit https://github.com/redhat-actions/crda/blob/main/README.md

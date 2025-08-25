@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.8</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.eBusiness</groupId>
+	<artifactId>web_ocp</artifactId>
+	<version>0.0.1</version>
+	<packaging>war</packaging>
+	<name>web_ocp</name>
+	<description>openshift deployment of angular app</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+		<frontend.workingDirectory>ng_web</frontend.workingDirectory>
+		<frontend.buildDirectory>dist/ebusiness</frontend.buildDirectory>
+		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
+		<!-- Node.js and npm versions - should match package.json engines -->
+		<node.version>v22.17.1</node.version>
+		<!-- Fully-qualified image name used by JKube; override with -Djkube.imageName=... when needed -->
+		<jkube.imageName>image-registry.openshift-image-registry.svc:5000/mitalparikh-dev/ebusiness-web-ocp-git:${project.version}</jkube.imageName>
+	</properties>
+	<profiles>
+		<!-- <profile>
+			<id>local</id>
+			<properties>
+				<spring.profiles.active>local</spring.profiles.active>
+			</properties>
+		</profile> -->
+		<profile>
+			<id>openshift</id>
+			<properties>
+				<spring.profiles.active>openshift</spring.profiles.active>
+			</properties>
+			<build>
+				<plugins>
+					<!-- Eclipse JKube OpenShift Maven Plugin (profile-scoped) -->
+					<plugin>
+						<groupId>org.eclipse.jkube</groupId>
+						<artifactId>openshift-maven-plugin</artifactId>
+						<version>1.16.2</version>
+						<configuration>
+							<images>
+								<image>
+									<!-- Using assembly-based image; image name should be fully qualified for pushing to a registry -->
+									<name>${jkube.imageName}</name>
+									<build>
+										<!-- Use project Dockerfile located at project root -->
+										<dockerFile>${project.basedir}/Dockerfile</dockerFile>
+										<env>
+											<JAVA_APP_JAR>${project.build.finalName}.war</JAVA_APP_JAR>
+											<JAVA_APP_DIR>/deployments</JAVA_APP_DIR>
+										</env>
+										<ports>
+											<port>8080</port>
+										</ports>
+									</build>
+								</image>
+							</images>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<!-- Frontend Maven Plugin - Build Angular App -->
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.15.1</version>
+				<configuration>
+					<workingDirectory>${frontend.workingDirectory}</workingDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>install node and corepack</id>
+						<goals>
+							<goal>install-node-and-corepack</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>${node.version}</nodeVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>corepack</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<arguments>npm install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm build</id>
+						<goals>
+							<goal>corepack</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<arguments>npm run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Maven Resources Plugin - Copy Angular build to Spring Boot static -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-angular-build</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/classes/static</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${frontend.workingDirectory}/${frontend.buildDirectory}/browser</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Maven WAR Plugin - Configure WAR packaging -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warName>${project.artifactId}-${project.version}</warName>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<directory>${frontend.workingDirectory}/${frontend.buildDirectory}/browser</directory>
+							<targetPath>/</targetPath>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+			<!-- Eclipse JKube OpenShift Maven Plugin -->
+
+
+		</plugins>
+	</build>
+
+</project>

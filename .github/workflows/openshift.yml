@@ -71,7 +71,7 @@ jobs:
               distribution: 'adopt'
               java-version: '17'
           - name: Build with Maven
-            run: mvn clean install -f eBusiness_ocp/pom.xml # Adjust path to your pom.xml
+            run: mvn clean install -f eBusiness_ocp/blob/feature/V1/pom.xml # Adjust path to your pom.xml
             
   # 🖊️ EDIT if you want to run vulnerability check on your project before deploying
   # the application. Please uncomment the below CRDA scan job and configure to run it in

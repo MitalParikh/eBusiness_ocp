@@ -135,9 +135,6 @@ jobs:
             core.info(`✅ All the required secrets are set`);
           }
 
-    - name: Check out repository
-      uses: actions/checkout@v4
-
     - name: Determine app name
       if: env.APP_NAME == ''
       run: |
